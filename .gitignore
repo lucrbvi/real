@@ -1,0 +1,4 @@
+out/*
+engine/game.h
+*.mrb
+*.a
