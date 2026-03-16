@@ -28,8 +28,11 @@ static char *default_output_path(const char *input) {
     return out;
 }
 
-static int cmd_run(const char *path) {
-    mrb_state *mrb = mrb_open();
+static int cmd_run(mrb_state *mrb, const char *path) {
+    if (mrb == NULL) {
+        mrb = mrb_open();
+    }
+
     if (!mrb) {
         fprintf(stderr, "Allocation error\n");
         return 1;

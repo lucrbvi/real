@@ -34,8 +34,11 @@ fn buildRaylib(
     const raylib_dep = b.dependency("raylib", .{
         .target = target,
         .optimize = optimize,
+        .platform = @as(@import("raylib").PlatformBackend, .glfw),
     });
-    return raylib_dep.artifact("raylib");
+    const raylib = raylib_dep.artifact("raylib");
+
+    return raylib;
 }
 
 fn addEngineExe(
@@ -144,4 +147,20 @@ pub fn build(b: *std.Build) void {
     run_cmd.step.dependOn(b.getInstallStep());
     if (b.args) |args| run_cmd.addArgs(args);
     b.step("run", "Run the game").dependOn(&run_cmd.step);
+
+    const dev = addEngineExe(
+        b,
+        "dev",
+        b.graph.host,
+        .Debug,
+        &.{"-DDEV_MODE"},
+        raylib_host,
+    );
+    b.installArtifact(dev);
+
+    const run_dev_cmd = b.addRunArtifact(dev);
+    run_dev_cmd.step.dependOn(b.getInstallStep());
+    run_dev_cmd.cwd = b.path(".");
+    if (b.args) |args| run_dev_cmd.addArgs(args);
+    b.step("dev", "Run in dev mode").dependOn(&run_dev_cmd.step);
 }
