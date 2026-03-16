@@ -1,6 +1,20 @@
 CC = gcc
 CFLAGS = -Wall -I./engine/libs
-LDFLAGS = -L./engine/libs -lraylib -lm -lpthread -lX11
+
+UNAME := $(shell uname)
+
+ifeq ($(UNAME), Darwin)
+  LDFLAGS = -L./engine/libs -lraylib \
+            -framework Cocoa \
+            -framework OpenGL \
+            -framework IOKit \
+            -framework CoreVideo \
+            -framework CoreFoundation \
+            -framework CoreGraphics \
+            -framework AppKit
+else
+  LDFLAGS = -L./engine/libs -lraylib -lm -lpthread -lX11
+endif
 
 out/real: engine/real.c engine/libs/mruby.h engine/libs/mruby.c engine/libs/raylib.h
 	$(CC) $(CFLAGS) engine/real.c engine/libs/mruby.c -o out/real $(LDFLAGS)

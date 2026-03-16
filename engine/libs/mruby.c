@@ -112479,9 +112479,9 @@ convert_stat(const struct stat *src, mrb_io_stat *dst)
 #elif defined(__APPLE__) || defined(__FreeBSD__) || \
       defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
   /* BSD/macOS: st_atime is typically a direct member */
-  atime_val = src->st_atime;
-  mtime_val = src->st_mtime;
-  ctime_val = src->st_ctime;
+  atime_val = src->st_atimespec.tv_sec;
+  mtime_val = src->st_mtimespec.tv_sec;
+  ctime_val = src->st_ctimespec.tv_sec;
 #else
   /* POSIX.1-2008: use st_atim.tv_sec directly */
   atime_val = src->st_atim.tv_sec;

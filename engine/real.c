@@ -46,22 +46,30 @@ static mrb_value window_open(mrb_state *mrb, mrb_value self) {
     mrb_get_args(mrb, "&", &block);
 
     if (mrb_nil_p(block)) {
-        mrb_raise(mrb, E_ARGUMENT_ERROR, "block required in Real::Window.open");
+        printf("WARNING: You called Real::Window.open without blocks in arguments! It will cause an infinite loop!\n");
     }
 
     InitWindow(500, 500, "real");
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
         BeginDrawing();
-        mrb_yield(mrb, block, mrb_nil_value());
+
+        if (!mrb_nil_p(block)) {
+            mrb_yield(mrb, block, mrb_nil_value());
+        }
+
+        if (!IsWindowReady()) break;
+
         EndDrawing();
     }
-    CloseWindow();
+
+    if (IsWindowReady()) CloseWindow();
+
     return mrb_nil_value();
 }
 
 static mrb_value window_close(mrb_state *mrb, mrb_value self) {
-    CloseWindow();
+    if (IsWindowReady()) CloseWindow();
     return mrb_nil_value();
 }
 
@@ -77,6 +85,47 @@ static mrb_value window_is_hidden(mrb_state *mrb, mrb_value self) {
     return IsWindowHidden() ? mrb_true_value() : mrb_false_value();
 }
 
+static mrb_value window_is_minimized(mrb_state *mrb, mrb_value self) {
+    return IsWindowMinimized() ? mrb_true_value() : mrb_false_value();
+}
+
+static mrb_value window_is_maximized(mrb_state *mrb, mrb_value self) {
+    return IsWindowMaximized() ? mrb_true_value() : mrb_false_value();
+}
+
+static mrb_value window_is_focused(mrb_state *mrb, mrb_value self) {
+    return IsWindowFocused() ? mrb_true_value() : mrb_false_value();
+}
+
+static mrb_value window_is_resized(mrb_state *mrb, mrb_value self) {
+    return IsWindowResized() ? mrb_true_value() : mrb_false_value();
+}
+
+static mrb_value window_set_fullscreen(mrb_state *mrb, mrb_value self) {
+    ToggleFullscreen();
+    return mrb_nil_value();
+}
+
+static mrb_value window_set_borderless(mrb_state *mrb, mrb_value self) {
+    ToggleBorderlessWindowed();
+    return mrb_nil_value();
+}
+
+static mrb_value window_set_maximize(mrb_state *mrb, mrb_value self) {
+    MaximizeWindow();
+    return mrb_nil_value();
+}
+
+static mrb_value window_set_minimize(mrb_state *mrb, mrb_value self) {
+    MinimizeWindow();
+    return mrb_nil_value();
+}
+
+static mrb_value window_set_restore(mrb_state *mrb, mrb_value self) {
+    RestoreWindow();
+    return mrb_nil_value();
+}
+
 void load_mruby_objects(mrb_state *mrb) {
     struct RClass *real_mod = mrb_define_module(mrb, "Real");
 
@@ -88,6 +137,19 @@ void load_mruby_objects(mrb_state *mrb) {
     mrb_define_class_method(mrb, window, "ready?", window_is_ready, MRB_ARGS_NONE());
     mrb_define_class_method(mrb, window, "fullscreen?", window_is_fullscreen, MRB_ARGS_NONE());
     mrb_define_class_method(mrb, window, "hidden?", window_is_hidden, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "minimized?", window_is_minimized, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "maximized?", window_is_maximized, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "minimize?", window_is_minimized, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "maximize?", window_is_maximized, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "focused?", window_is_focused, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "focus?", window_is_focused, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "resized?", window_is_resized, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "resize?", window_is_resized, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "fullscreen", window_set_fullscreen, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "borderless", window_set_borderless, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "minimize", window_set_minimize, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "maximize", window_set_maximize, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "restore", window_set_restore, MRB_ARGS_NONE());
 }
 
 int main(int argc, char *argv[]) {

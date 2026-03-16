@@ -2,3 +2,4 @@ out/*
 engine/game.h
 *.mrb
 *.a
+.DS_Store
