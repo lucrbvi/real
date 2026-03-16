@@ -11,7 +11,7 @@
   <meta name="keywords" content="ruby,class,Real::Window">
 
 
-    <meta name="description" content="class Real::Window: Window Manages the game window lifecycle and exposes window state queries. All methods are **class-level** — you never instantiate this class.">
+    <meta name="description" content="class Real::Window: Window Manages the game window lifecycle and exposes window state queries. All methods are **class-level**; you never instantiate this class.">
 
 
 
@@ -102,13 +102,6 @@
 
 
 
-
-          <li>
-      <a href="#class-real-window-warning">Warning</a>
-</li>
-
-
-
               </ul>
             </details>
           </li>
@@ -157,11 +150,19 @@
 
       <li ><a href="#method-c-minimized-3F">minimized?</a></li>
 
+      <li ><a href="#method-c-opacity">opacity</a></li>
+
+      <li ><a href="#method-c-opacity-3D">opacity=</a></li>
+
       <li ><a href="#method-c-open">open</a></li>
+
+      <li ><a href="#method-c-position">position</a></li>
 
       <li ><a href="#method-c-ready-3F">ready?</a></li>
 
       <li ><a href="#method-c-resized-3F">resized?</a></li>
+
+      <li ><a href="#method-c-resolution">resolution</a></li>
 
       <li ><a href="#method-c-restore">restore</a></li>
 
@@ -220,7 +221,7 @@
 <span id="class-Real::Window-label-Real-3A-3AWindow" class="legacy-anchor"></span>
 <h1 id="class-real-window-realwindow"><a href="#class-real-window-realwindow"><a href="Window.html"><code>Real::Window</code></a></a></h1>
 
-<p>Manages the game window lifecycle and exposes window state queries. All methods are <strong>class-level</strong> — you never instantiate this class.</p>
+<p>Manages the game window lifecycle and exposes window state queries. All methods are <strong>class-level</strong>; you never instantiate this class.</p>
 
 <span id="class-Real::Window-label-Typical+usage" class="legacy-anchor"></span>
 <h2 id="class-real-window-typical-usage"><a href="#class-real-window-typical-usage">Typical usage</a></h2>
@@ -233,9 +234,6 @@
   <span class="ruby-comment"># put your draw calls here</span>
 <span class="ruby-keyword">end</span>
 </pre>
-
-<span id="class-Real::Window-label-Warning" class="legacy-anchor"></span>
-<h2 id="class-real-window-warning"><a href="#class-real-window-warning">Warning</a></h2>
 
 <p>Calling <a href="Window.html#method-c-open"><code>Real::Window.open</code></a> <strong>without a block</strong> will open the window but skip frame drawing, resulting in an <strong>infinite loop</strong> with no way to stop it except by killing the process.</p>
 
@@ -281,7 +279,7 @@
             </details>
           </div>
           <div class="method-source-code" id="borderless-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 198</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 219</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">borderless</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -323,7 +321,7 @@
             </details>
           </div>
           <div class="method-source-code" id="close-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 140</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 138</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">close</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -365,7 +363,7 @@
             </details>
           </div>
           <div class="method-source-code" id="focused-3F-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 222</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 243</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">focused?</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -405,7 +403,7 @@
             </details>
           </div>
           <div class="method-source-code" id="fullscreen-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 190</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 211</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">fullscreen</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -447,7 +445,7 @@
             </details>
           </div>
           <div class="method-source-code" id="fullscreen-3F-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 193</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 214</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">fullscreen?</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -487,7 +485,7 @@
             </details>
           </div>
           <div class="method-source-code" id="hidden-3F-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 228</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 249</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">hidden?</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -527,7 +525,7 @@
             </details>
           </div>
           <div class="method-source-code" id="maximize-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 208</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 229</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">maximize</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -569,7 +567,7 @@
             </details>
           </div>
           <div class="method-source-code" id="maximized-3F-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 219</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 240</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">maximized?</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -609,7 +607,7 @@
             </details>
           </div>
           <div class="method-source-code" id="minimize-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 203</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 224</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">minimize</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -651,7 +649,7 @@
             </details>
           </div>
           <div class="method-source-code" id="minimized-3F-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 216</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 237</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">minimized?</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -661,6 +659,93 @@
 
 
           <p>@return [Boolean] <code>true</code> if the window is minimized</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-opacity" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-opacity" title="Link to this method">
+                <span class="method-name">opacity</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="opacity-source">
+            <pre><span class="ruby-comment"># File engine/real.rb, line 171</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">opacity</span>; <span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Returns the current window opacity.</p>
+
+<p>@return [Float]</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-opacity-3D" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-opacity-3D" title="Link to this method">
+                <span class="method-name">opacity=</span>
+                <span class="method-args">(opa)</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="opacity-3D-source">
+            <pre><span class="ruby-comment"># File engine/real.rb, line 166</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">opacity=</span>(<span class="ruby-identifier">opa</span>); <span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <pre class="ruby"><span class="ruby-constant">Real</span><span class="ruby-operator">::</span><span class="ruby-constant">Window</span>.<span class="ruby-identifier">opacity</span> = <span class="ruby-value">0.65</span> <span class="ruby-comment"># 65% of opacity</span>
+</pre>
+
+<p>@param opacity [Float] the new opacity</p>
+
+<p>@return [self]</p>
 
 
         </div>
@@ -691,7 +776,7 @@
             </details>
           </div>
           <div class="method-source-code" id="open-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 134</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 132</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">open</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>); <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -740,6 +825,48 @@
       </div>
 
 
+      <div id="method-c-position" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-position" title="Link to this method">
+                <span class="method-name">position</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="position-source">
+            <pre><span class="ruby-comment"># File engine/real.rb, line 176</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">position</span>; <span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Returns the current position of the <a href="Window.html"><code>Window</code></a> in the environment.</p>
+
+<p>@return [Real::Vector2]</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
       <div id="method-c-ready-3F" class="method-detail anchor-link ">
         <div class="method-header">
 
@@ -759,7 +886,7 @@
             </details>
           </div>
           <div class="method-source-code" id="ready-3F-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 145</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 143</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">ready?</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -801,7 +928,7 @@
             </details>
           </div>
           <div class="method-source-code" id="resized-3F-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 225</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 246</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">resized?</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -811,6 +938,48 @@
 
 
           <p>@return [Boolean] <code>true</code> if the window was resized this frame</p>
+
+
+        </div>
+
+
+
+
+
+      </div>
+
+
+      <div id="method-c-resolution" class="method-detail anchor-link ">
+        <div class="method-header">
+
+            <div class="method-heading">
+              <a href="#method-c-resolution" title="Link to this method">
+                <span class="method-name">resolution</span>
+                <span class="method-args">()</span>
+              </a>
+            </div>
+
+        </div>
+
+
+          <div class="method-controls">
+            <details class="method-source-toggle">
+              <summary>Source</summary>
+            </details>
+          </div>
+          <div class="method-source-code" id="resolution-source">
+            <pre><span class="ruby-comment"># File engine/real.rb, line 181</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">resolution</span>; <span class="ruby-keyword">end</span></pre>
+          </div>
+
+
+
+        <div class="method-description">
+
+
+          <p>Returns the current resolution (width, height) of the <a href="Window.html"><code>Window</code></a>.</p>
+
+<p>@return [Real::Vector2]</p>
 
 
         </div>
@@ -841,7 +1010,7 @@
             </details>
           </div>
           <div class="method-source-code" id="restore-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 213</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 234</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">restore</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -883,7 +1052,7 @@
             </details>
           </div>
           <div class="method-source-code" id="screen_height-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 185</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 206</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">screen_height</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -925,7 +1094,7 @@
             </details>
           </div>
           <div class="method-source-code" id="screen_width-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 179</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 200</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">screen_width</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -967,7 +1136,7 @@
             </details>
           </div>
           <div class="method-source-code" id="size-3D-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 173</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 194</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">size=</span>(<span class="ruby-identifier">size</span>); <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -1016,7 +1185,7 @@
             </details>
           </div>
           <div class="method-source-code" id="title-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 160</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 158</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">title</span>; <span class="ruby-keyword">end</span></pre>
           </div>
 
@@ -1058,7 +1227,7 @@
             </details>
           </div>
           <div class="method-source-code" id="title-3D-source">
-            <pre><span class="ruby-comment"># File engine/real.rb, line 154</span>
+            <pre><span class="ruby-comment"># File engine/real.rb, line 152</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">title=</span>(<span class="ruby-identifier">title</span>); <span class="ruby-keyword">end</span></pre>
           </div>
 

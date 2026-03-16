@@ -2,6 +2,8 @@
 #include "libs/mruby.h"
 #include "mrutil.h"
 
+#include <string.h>
+
 #ifdef _WIN32
     #include<windows.h>
     #define sleep(time) Sleep(time * 1000)
@@ -55,6 +57,8 @@ static const mrb_data_type vector2_type = {
 static mrb_value window_open(mrb_state *mrb, mrb_value self) {
     mrb_value block;
     mrb_get_args(mrb, "&", &block);
+
+    mrb_iv_set(mrb, self, mrb_intern_lit(mrb, "@opacity"), mrb_float_value(mrb, 1.0f));
 
     if (mrb_nil_p(block)) {
         printf("WARNING: You called Real::Window.open without blocks in arguments! It will cause an infinite loop!\n");
@@ -200,6 +204,47 @@ static mrb_value window_set_size(mrb_state *mrb, mrb_value self) {
     return obj;
 }
 
+static mrb_value window_set_opacity(mrb_state *mrb, mrb_value self)
+{
+    mrb_float opa;
+    mrb_get_args(mrb, "f", &opa);
+
+    SetWindowOpacity(opa);
+
+    mrb_value opa_val = mrb_float_value(mrb, opa);
+    mrb_iv_set(mrb, self, mrb_intern_lit(mrb, "@opacity"), opa_val);
+
+    return opa_val;
+}
+
+static mrb_value window_get_position(mrb_state *mrb, mrb_value self) {
+    Vector2 pos = GetWindowPosition();
+    
+    struct RClass *real_mod = mrb_module_get(mrb, "Real");
+    struct RClass *vector2_class = mrb_class_get_under(mrb, real_mod, "Vector2");
+
+    mrb_value x = mrb_float_value(mrb, pos.x);
+    mrb_value y = mrb_float_value(mrb, pos.y);
+
+    return mrb_funcall(mrb, mrb_obj_value(vector2_class), "new", 2, x, y);
+}
+
+static mrb_value window_get_opacity(mrb_state *mrb, mrb_value self) {
+    mrb_value size = mrb_iv_get(mrb, self, mrb_intern_lit(mrb, "@opacity"));
+    return size;
+}
+
+static mrb_value window_get_resolution(mrb_state *mrb, mrb_value self) { 
+    struct RClass *real_mod = mrb_module_get(mrb, "Real");
+    struct RClass *window_class = mrb_class_get_under(mrb, real_mod, "Window");
+    struct RClass *vector2_class = mrb_class_get_under(mrb, real_mod, "Vector2");
+
+    mrb_value h = mrb_funcall(mrb, mrb_obj_value(window_class), "screen_height", 0);
+    mrb_value w = mrb_funcall(mrb, mrb_obj_value(window_class), "screen_width", 0);
+
+    return mrb_funcall(mrb, mrb_obj_value(vector2_class), "new", 2, w, h);
+}
+
 static mrb_value vector2_init(mrb_state *mrb, mrb_value self) {
     mrb_float x, y;
     mrb_get_args(mrb, "ff", &x, &y);
@@ -244,6 +289,24 @@ static mrb_value vector2_set_y(mrb_state *mrb, mrb_value self) {
     return self;
 }
 
+static mrb_value vector2_to_s(mrb_state *mrb, mrb_value self) {
+    double *data = (double*)mrb_data_get_ptr(mrb, self, &vector2_type);
+
+    mrb_value x = mrb_float_value(mrb, data[0]);
+    mrb_value y = mrb_float_value(mrb, data[1]);
+
+    mrb_value sx = mrb_obj_as_string(mrb, x);
+    mrb_value sy = mrb_obj_as_string(mrb, y);
+
+    mrb_value str = mrb_str_new_lit(mrb, "(");
+    mrb_str_cat_str(mrb, str, sx);
+    mrb_str_cat_cstr(mrb, str, ", ");
+    mrb_str_cat_str(mrb, str, sy);
+    mrb_str_cat_cstr(mrb, str, ")");
+
+    return str;
+}
+
 // Sleep for `time` seconds
 static mrb_value mrb_sleep(mrb_state *mrb, mrb_value self) {
     mrb_int time;
@@ -252,6 +315,94 @@ static mrb_value mrb_sleep(mrb_state *mrb, mrb_value self) {
     sleep((int)time);
 
     return mrb_int_value(mrb, time);
+}
+
+static mrb_value monitor_get_current(mrb_state *mrb, mrb_value self) {
+    int monitor = GetCurrentMonitor();
+
+    return mrb_int_value(mrb, monitor);
+}
+
+static mrb_value monitor_get_refresh_rate(mrb_state *mrb, mrb_value self) {
+    struct RClass *real_mod = mrb_module_get(mrb, "Real");
+    struct RClass *monitor_class = mrb_class_get_under(mrb, real_mod, "Monitor");
+
+    mrb_value current = mrb_funcall(mrb, mrb_obj_value(monitor_class), "current", 0);
+    int monitor = (int)mrb_integer(current);
+
+    int rate = GetMonitorRefreshRate(monitor);
+
+    return mrb_int_value(mrb, rate);
+}
+
+static mrb_value monitor_get_height(mrb_state *mrb, mrb_value self) {
+    struct RClass *real_mod = mrb_module_get(mrb, "Real");
+    struct RClass *monitor_class = mrb_class_get_under(mrb, real_mod, "Monitor");
+
+    mrb_value current = mrb_funcall(mrb, mrb_obj_value(monitor_class), "current", 0);
+    int monitor = (int)mrb_integer(current);
+
+    int h = GetMonitorHeight(monitor);
+
+    return mrb_int_value(mrb, h);
+}
+
+static mrb_value monitor_get_width(mrb_state *mrb, mrb_value self) {
+    struct RClass *real_mod = mrb_module_get(mrb, "Real");
+    struct RClass *monitor_class = mrb_class_get_under(mrb, real_mod, "Monitor");
+
+    mrb_value current = mrb_funcall(mrb, mrb_obj_value(monitor_class), "current", 0);
+    int monitor = (int)mrb_integer(current);
+
+    int w = GetMonitorWidth(monitor);
+
+    return mrb_int_value(mrb, w);
+}
+
+static mrb_value monitor_get_physical_height(mrb_state *mrb, mrb_value self) {
+    struct RClass *real_mod = mrb_module_get(mrb, "Real");
+    struct RClass *monitor_class = mrb_class_get_under(mrb, real_mod, "Monitor");
+
+    mrb_value current = mrb_funcall(mrb, mrb_obj_value(monitor_class), "current", 0);
+    int monitor = (int)mrb_integer(current);
+
+    int h = GetMonitorPhysicalHeight(monitor);
+
+    return mrb_int_value(mrb, h);
+}
+
+static mrb_value monitor_get_physical_width(mrb_state *mrb, mrb_value self) {
+    struct RClass *real_mod = mrb_module_get(mrb, "Real");
+    struct RClass *monitor_class = mrb_class_get_under(mrb, real_mod, "Monitor");
+
+    mrb_value current = mrb_funcall(mrb, mrb_obj_value(monitor_class), "current", 0);
+    int monitor = (int)mrb_integer(current);
+
+    int w = GetMonitorPhysicalWidth(monitor);
+
+    return mrb_int_value(mrb, w);
+}
+
+static mrb_value monitor_get_resolution(mrb_state *mrb, mrb_value self) { 
+    struct RClass *real_mod = mrb_module_get(mrb, "Real");
+    struct RClass *monitor_class = mrb_class_get_under(mrb, real_mod, "Monitor");
+    struct RClass *vector2_class = mrb_class_get_under(mrb, real_mod, "Vector2");
+
+    mrb_value h = mrb_funcall(mrb, mrb_obj_value(monitor_class), "height", 0);
+    mrb_value w = mrb_funcall(mrb, mrb_obj_value(monitor_class), "width", 0);
+
+    return mrb_funcall(mrb, mrb_obj_value(vector2_class), "new", 2, w, h);
+}
+
+static mrb_value monitor_get_physical_resolution(mrb_state *mrb, mrb_value self) { 
+    struct RClass *real_mod = mrb_module_get(mrb, "Real");
+    struct RClass *monitor_class = mrb_class_get_under(mrb, real_mod, "Monitor");
+    struct RClass *vector2_class = mrb_class_get_under(mrb, real_mod, "Vector2");
+
+    mrb_value h = mrb_funcall(mrb, mrb_obj_value(monitor_class), "physical_height", 0);
+    mrb_value w = mrb_funcall(mrb, mrb_obj_value(monitor_class), "physical_width", 0);
+
+    return mrb_funcall(mrb, mrb_obj_value(vector2_class), "new", 2, w, h);
 }
 
 void load_mruby_objects(mrb_state *mrb) {
@@ -287,6 +438,20 @@ void load_mruby_objects(mrb_state *mrb) {
     mrb_define_class_method(mrb, window, "size=", window_set_size, MRB_ARGS_REQ(1));
     mrb_define_class_method(mrb, window, "screen_width",  window_get_screen_width, MRB_ARGS_NONE());
     mrb_define_class_method(mrb, window, "screen_height", window_get_screen_height, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "opacity", window_get_opacity, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "opacity=", window_set_opacity, MRB_ARGS_REQ(1));
+    mrb_define_class_method(mrb, window, "position", window_get_position, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, window, "resolution", window_get_resolution, MRB_ARGS_NONE());
+
+    struct RClass *monitor = mrb_define_class_under(mrb, real_mod, "Monitor", mrb->object_class);
+    mrb_define_class_method(mrb, monitor, "current", monitor_get_current, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, monitor, "refresh_rate", monitor_get_refresh_rate, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, monitor, "height", monitor_get_height, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, monitor, "width", monitor_get_width, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, monitor, "physical_height", monitor_get_physical_height, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, monitor, "physical_width", monitor_get_physical_width, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, monitor, "resolution", monitor_get_resolution, MRB_ARGS_NONE());
+    mrb_define_class_method(mrb, monitor, "physical_resolution", monitor_get_physical_resolution, MRB_ARGS_NONE());
 
     struct RClass *vector2 = mrb_define_class_under(mrb, real_mod, "Vector2", mrb->object_class);
     MRB_SET_INSTANCE_TT(vector2, MRB_TT_DATA);
@@ -295,6 +460,7 @@ void load_mruby_objects(mrb_state *mrb) {
     mrb_define_method(mrb, vector2, "y=", vector2_set_y, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, vector2, "x", vector2_get_x, MRB_ARGS_NONE());
     mrb_define_method(mrb, vector2, "y", vector2_get_y, MRB_ARGS_NONE());
+    mrb_define_method(mrb, vector2, "to_s", vector2_to_s, MRB_ARGS_NONE());
 }
 
 int main(int argc, char *argv[]) {

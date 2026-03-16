@@ -94,8 +94,6 @@ module Real
   # end
   # ```
   #
-  # ## Warning
-  #
   # Calling `Real::Window.open` **without a block** will open the window
   # but skip frame drawing, resulting in an **infinite loop** with no way
   # to stop it except by killing the process.
@@ -158,6 +156,29 @@ module Real
     #
     # @return [String]
     def self.title; end
+  
+    # ```ruby
+    # Real::Window.opacity = 0.65 # 65% of opacity
+    # ```
+    # @param opacity [Float] the new opacity
+    #
+    # @return [self]
+    def self.opacity=(opa); end
+    
+    # Returns the current window opacity.
+    #
+    # @return [Float]
+    def self.opacity; end
+
+    # Returns the current position of the Window in the environment.
+    #
+    # @return [Real::Vector2]
+    def self.position; end
+
+    # Returns the current resolution (width, height) of the Window.
+    #
+    # @return [Real::Vector2]
+    def self.resolution; end
 
     # Sets the window size.
     #
@@ -226,6 +247,47 @@ module Real
 
     # @return [Boolean] `true` if the window is hidden
     def self.hidden?; end
+  end
+  
+  # An interface to the monitor (display).
+  #
+  # Like Real::Window *you do not need to instantiate it*!
+  class Monitor
+    
+    # Get the refresh rate of the current Monitor.
+    #
+    # @return [Float]
+    def refresh_rate; end
+
+    # Get the width of the current Monitor.
+    #
+    # @return [Int]
+    def width; end
+
+    # Get the height of the current Monitor.
+    #
+    # @return [Int]
+    def height; end
+
+    # Get the physical width of the current Monitor.
+    #
+    # @return [Int]
+    def physical_width; end
+
+    # Get the physical height of the current Monitor.
+    #
+    # @return [Int]
+    def physical_height; end
+
+    # Returns the current resolution (width, height) of the current Monitor.
+    #
+    # @return [Real::Vector2]
+    def self.resolution; end
+
+    # Returns the current physical resolution (physical width, physical height) of the current Monitor.
+    #
+    # @return [Real::Vector2]
+    def self.physical_resolution; end
   end
 end
 

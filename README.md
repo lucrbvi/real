@@ -1,6 +1,6 @@
 # Real
 
-A simple game framework based on [raylib](https://raylib.com) and [mruby](https://mruby.org/).
+Real, also known as the opposite of Unreal, is a simple game framework based on [raylib](https://raylib.com) and [mruby](https://mruby.org/).
 
 ## Get started
 

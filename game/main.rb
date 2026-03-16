@@ -13,7 +13,9 @@ Window.open do
     a = 800
   end
 
-  Window.title = "Real | (#{Window.screen_width} #{Window.screen_height})"
+  puts Window.position
+
+  Window.title = "Real | #{Window.resolution}"
   a -= 1
 
   Window.size = Vector2.new(a, a)
