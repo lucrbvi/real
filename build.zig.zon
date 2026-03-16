@@ -1,0 +1,12 @@
+.{
+    .name = .real,
+    .version = "0.1.0",
+    .dependencies = .{
+        .raylib = .{
+            .url = "https://github.com/raysan5/raylib/archive/ceeaf57.zip",
+            .hash = "raylib-5.6.0-dev-whq8uOnoJwXZ7xGFLIgWfWqebGHq2R-H3UHNhvAUhYYT",
+        },
+    },
+    .fingerprint = 0x968cc9556316c07c,
+    .paths = .{"."},
+}

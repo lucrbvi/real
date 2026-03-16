@@ -1,11 +1,11 @@
 # Real
 
-A simple game framework based on [raylib](https://raylib.com) 5.5 and [mruby](https://mruby.org/) 3.4.
+A simple game framework based on [raylib](https://raylib.com) and [mruby](https://mruby.org/).
 
 ## Get started
 
-The only dependencie you must install on your computer is Raylib. I recommend you to download the precompiled version [here](https://github.com/raysan5/raylib/releases/tag/5.5) for your platform, you must put the compiled object in the `engine/libs/` directory.
+The only dependency you must install on your computer is Zig. Click [here](https://ziglang.org/learn/getting-started/) to install Zig.
 
-We have an amalgamated version of mruby, so you don't have to install it on your machine.
+Our `build.zig` and `build.zig.zon` will build raylib on your own machine.
 
-To build your game you can check the `game/` directory. To compile it in a single binary you must run `make`.
+We have an amalgamated version of mruby in the repo, so you don't have to install it on your machine.

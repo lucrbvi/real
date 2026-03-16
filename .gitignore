@@ -4,3 +4,4 @@ engine/game.h
 .DS_Store
 .zig-cache
 zig-out
+zig-pkg
